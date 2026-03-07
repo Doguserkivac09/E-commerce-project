@@ -18,10 +18,13 @@ function Footer() {
             <Link to="/shop" className="hover:text-gray-900">
               Mağaza
             </Link>
-            <Link to="/" className="hover:text-gray-900">
+            <Link to="/about" className="hover:text-gray-900">
               Hakkımızda
             </Link>
-            <Link to="/" className="hover:text-gray-900">
+            <Link to="/team" className="hover:text-gray-900">
+              Ekibimiz
+            </Link>
+            <Link to="/contact" className="hover:text-gray-900">
               İletişim
             </Link>
           </div>

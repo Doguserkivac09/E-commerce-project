@@ -1,5 +1,10 @@
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import HeroSlider from "../components/HeroSlider";
 import ProductCard from "../components/ProductCard";
+import { fetchCategoriesThunk } from "../redux/actions/productActions";
+import { getCategoryLink } from "../utils/categoryHelpers";
 
 const editorPicks = [
   { id: 1, label: "ERKEK" },
@@ -71,10 +76,100 @@ const posts = [
   },
 ];
 
+const PLACEHOLDER_IMAGES = [
+  "https://images.pexels.com/photos/7671246/pexels-photo-7671246.jpeg?auto=compress&cs=tinysrgb&w=400",
+  "https://images.pexels.com/photos/6311579/pexels-photo-6311579.jpeg?auto=compress&cs=tinysrgb&w=400",
+  "https://images.pexels.com/photos/3738089/pexels-photo-3738089.jpeg?auto=compress&cs=tinysrgb&w=400",
+  "https://images.pexels.com/photos/7671247/pexels-photo-7671247.jpeg?auto=compress&cs=tinysrgb&w=400",
+  "https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg?auto=compress&cs=tinysrgb&w=400",
+];
+
 function Home() {
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.products?.categories || []);
+
+  useEffect(() => {
+    if (!categories.length) {
+      dispatch(fetchCategoriesThunk());
+    }
+  }, [dispatch, categories.length]);
+
+  const top5ByRating = [...categories]
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+    .slice(0, 5);
+
   return (
     <div className="flex flex-col gap-10">
       <HeroSlider />
+
+      {top5ByRating.length > 0 && (
+        <section className="flex flex-col gap-5">
+          <div className="flex flex-col items-center text-center gap-1">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">
+              Kategoriler
+            </p>
+            <h2 className="text-lg md:text-xl font-semibold">
+              En Çok Tercih Edilen Kategoriler
+            </h2>
+            <p className="text-xs text-gray-500 max-w-md">
+              Rating değerine göre öne çıkan kategoriler.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-4 justify-center">
+            {top5ByRating.map((cat, index) => (
+              <Link
+                key={cat.id}
+                to={getCategoryLink(cat)}
+                className="flex flex-col w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(20%-1rem)] max-w-[200px]"
+              >
+                <div className="rounded-2xl overflow-hidden bg-gray-100 h-40 flex items-center justify-center">
+                  <img
+                    src={
+                      cat.image ||
+                      cat.img ||
+                      PLACEHOLDER_IMAGES[index % PLACEHOLDER_IMAGES.length]
+                    }
+                    alt={cat.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <p className="mt-2 text-sm font-medium text-gray-900 text-center truncate">
+                  {cat.name}
+                </p>
+                {cat.rating != null && (
+                  <p className="text-xs text-gray-500 text-center">
+                    ★ {Number(cat.rating).toFixed(1)}
+                  </p>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {categories.length > 0 && (
+        <section className="flex flex-col gap-5">
+          <div className="flex flex-col items-center text-center gap-1">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-400">
+              Tüm Kategoriler
+            </p>
+            <h2 className="text-lg md:text-xl font-semibold">
+              Kategorilere Göz At
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3 justify-center">
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                to={getCategoryLink(cat)}
+                className="px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-700 hover:border-emerald-500 hover:text-emerald-600"
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="flex flex-col gap-5">
         <div className="flex flex-col items-center text-center gap-1">

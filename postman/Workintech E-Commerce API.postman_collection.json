@@ -1,0 +1,126 @@
+{
+  "info": {
+    "name": "Workintech E-Commerce API",
+    "description": "API collection for workintech-fe-ecommerce backend. Base URL: https://workintech-fe-ecommerce.onrender.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://workintech-fe-ecommerce.onrender.com"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "description": "Paste token from Login response (no Bearer prefix)"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Get Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/roles",
+            "description": "Fetch available roles for signup (Customer, Admin, Store). Used to populate role_id in signup form."
+          }
+        },
+        {
+          "name": "Signup (Customer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"Test123!@#\",\n  \"role_id\": 1\n}"
+            },
+            "url": "{{baseUrl}}/signup",
+            "description": "Register a new customer or admin. Body: { name, email, password, role_id }. Replace role_id with value from GET /roles (e.g. 1=Customer, 2=Admin)."
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@commerce.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": "{{baseUrl}}/login",
+            "description": "Login with email and password. Test users (Password: 123456): customer@commerce.com, store@commerce.com, admin@commerce.com. Returns token and user."
+          }
+        },
+        {
+          "name": "Verify Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "description": "Token from login (no Bearer prefix)"
+              }
+            ],
+            "url": "{{baseUrl}}/verify",
+            "description": "Verify token and get user. Set Authorization header to token value (no Bearer). If authorized, returns user and may return new token to renew."
+          }
+        },
+        {
+          "name": "Signup (Store)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Store Owner Name\",\n  \"email\": \"store@example.com\",\n  \"password\": \"Store123!@#\",\n  \"role_id\": 3,\n  \"store\": {\n    \"name\": \"My Store\",\n    \"phone\": \"05321234567\",\n    \"tax_no\": \"T1234V123456\",\n    \"bank_account\": \"TR330006100519786457841326\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/signup",
+            "description": "Register a new store. role_id must be Store role from GET /roles. store: { name (min 3), phone (TR format), tax_no (TXXXXVXXXXXX), bank_account (TR IBAN) }."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/categories",
+            "description": "Fetch all categories. Store in product reducer. Used for header dropdown and home top 5. Response may include id, name, gender, image, rating, slug."
+          }
+        },
+        {
+          "name": "Get Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/products?limit=25&offset=0&category=2&filter=siyah&sort=price:desc",
+            "description": "Fetch products. Pagination: limit (default 25), offset (default 0). Page 1: limit=25&offset=0, Page 2: limit=25&offset=25, Page 3: limit=25&offset=50. Optional: category, filter, sort. Response: { total, products }."
+          }
+        }
+      ]
+    }
+  ]
+}
