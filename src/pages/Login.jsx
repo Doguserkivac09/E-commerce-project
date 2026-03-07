@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
@@ -8,6 +8,7 @@ import { loginThunk } from "../redux/actions/clientActions";
 
 function Login() {
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -32,15 +33,8 @@ function Login() {
       )
     )
       .then(() => {
-        const canGoBack =
-          window.history.length > 1 &&
-          document.referrer &&
-          !document.referrer.includes("/login");
-        if (canGoBack) {
-          history.goBack();
-        } else {
-          history.push("/");
-        }
+        const from = location.state?.from || "/";
+        history.replace(from);
       })
       .catch(() => {
         toast.error("Giriş başarısız. E-posta veya şifre hatalı.");

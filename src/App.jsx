@@ -12,8 +12,12 @@ import Team from "./pages/Team";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,6 +62,19 @@ function App() {
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route path="/cart">
+              <Cart />
+            </Route>
+            <Route path="/checkout">
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            </Route>
+            <Route path="/orders">
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
             </Route>
             <Route path="/product/:id">
               <ProductDetail />

@@ -8,6 +8,7 @@ import {
   setSort,
   setOffset,
 } from "../redux/actions/productActions";
+import { addToCart } from "../redux/actions/shoppingCartActions";
 import ProductCard from "../components/ProductCard";
 import { getProductDetailLink } from "../utils/categoryHelpers";
 
@@ -211,6 +212,7 @@ function Shop() {
                       oldPrice={card.oldPrice}
                       image={card.image}
                       to={detailLink}
+                      onAddToCart={() => dispatch(addToCart(product))}
                     />
                   </div>
                 );

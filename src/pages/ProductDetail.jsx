@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
 import { fetchProductByIdThunk } from "../redux/actions/productActions";
+import { addToCart } from "../redux/actions/shoppingCartActions";
 
 function ProductDetail() {
   const { productId, id, gender, categoryName, categoryId } = useParams();
@@ -129,6 +130,7 @@ function ProductDetail() {
           <div className="flex items-center gap-3 mt-2">
             <button
               type="button"
+              onClick={() => dispatch(addToCart(product))}
               className="flex-1 md:flex-none md:px-6 py-2.5 text-xs font-medium rounded-full bg-gray-900 text-white hover:bg-gray-800"
             >
               Sepete ekle

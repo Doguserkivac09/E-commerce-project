@@ -130,6 +130,49 @@
           }
         }
       ]
+    },
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "Get Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "description": "Token from Login (no Bearer prefix)"
+              }
+            ],
+            "url": "{{baseUrl}}/order",
+            "description": "Get previous orders of the logged-in user. Requires auth token. Used on Siparişlerim (Orders) page."
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "description": "Token from Login (no Bearer prefix)"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address_id\": 1,\n  \"order_date\": \"2024-01-10T14:18:30\",\n  \"card_no\": 1234123412341234,\n  \"card_name\": \"Ali Baş\",\n  \"card_expire_month\": 12,\n  \"card_expire_year\": 2025,\n  \"card_ccv\": 321,\n  \"price\": 1919,\n  \"products\": [\n    { \"product_id\": 12, \"count\": 1, \"detail\": \"açık mavi - xl\" },\n    { \"product_id\": 13, \"count\": 2, \"detail\": \"siyah - lg\" }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/order",
+            "description": "Create order. Requires auth token. Payload: address_id, order_date (ISO), card_no, card_name, card_expire_month, card_expire_year, card_ccv, price, products: [{ product_id, count, detail }]. On success, cart is cleared in app."
+          }
+        }
+      ]
     }
   ]
 }

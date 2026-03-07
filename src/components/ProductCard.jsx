@@ -8,7 +8,14 @@ function ProductCard({
   price,
   oldPrice,
   to,
+  onAddToCart,
 }) {
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onAddToCart?.();
+  };
+
   const cardContent = (
     <div className="flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5">
       <div className="relative overflow-hidden rounded-t-xl">
@@ -56,6 +63,7 @@ function ProductCard({
 
         <button
           type="button"
+          onClick={handleAddToCart}
           className="mt-3 inline-flex items-center justify-center rounded-full border border-gray-900 text-gray-900 text-xs font-medium py-2 px-4 hover:bg-gray-900 hover:text-white transition-colors"
         >
           Sepete ekle

@@ -2,6 +2,7 @@ const initialState = {
   user: {},
   addressList: [],
   creditCards: [],
+  orderList: [],
   roles: [],
   theme: "",
   language: "",
@@ -15,6 +16,8 @@ function clientReducer(state = initialState, action) {
       return { ...state, addressList: action.payload };
     case "CLIENT_SET_CREDIT_CARDS":
       return { ...state, creditCards: action.payload };
+    case "CLIENT_SET_ORDER_LIST":
+      return { ...state, orderList: action.payload };
     case "CLIENT_SET_ROLES":
       return { ...state, roles: action.payload };
     case "CLIENT_SET_THEME":
