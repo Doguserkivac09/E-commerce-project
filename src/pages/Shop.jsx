@@ -9,6 +9,7 @@ import {
   setOffset,
 } from "../redux/actions/productActions";
 import ProductCard from "../components/ProductCard";
+import { getProductDetailLink } from "../utils/categoryHelpers";
 
 function mapProductToCard(product) {
   return {
@@ -196,6 +197,7 @@ function Shop() {
             <div className="flex flex-col md:flex-row md:flex-wrap gap-4">
               {productList.map((product) => {
                 const card = mapProductToCard(product);
+                const detailLink = getProductDetailLink(product, categoryId ? { gender, categoryName, categoryId } : undefined);
                 return (
                   <div
                     key={product.id}
@@ -208,6 +210,7 @@ function Shop() {
                       price={card.price}
                       oldPrice={card.oldPrice}
                       image={card.image}
+                      to={detailLink}
                     />
                   </div>
                 );

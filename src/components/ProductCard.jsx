@@ -7,9 +7,10 @@ function ProductCard({
   title,
   price,
   oldPrice,
+  to,
 }) {
   const cardContent = (
-    <div className="flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm">
+    <div className="flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5">
       <div className="relative overflow-hidden rounded-t-xl">
         <div className="w-full h-56 bg-gray-100 flex items-center justify-center">
           {image ? (
@@ -63,12 +64,14 @@ function ProductCard({
     </div>
   );
 
-  if (!id) {
+  if (!id && !to) {
     return cardContent;
   }
 
+  const linkTo = to || (id ? `/product/${id}` : "/shop");
+
   return (
-    <Link to={`/product/${id}`} className="block">
+    <Link to={linkTo} className="block cursor-pointer">
       {cardContent}
     </Link>
   );

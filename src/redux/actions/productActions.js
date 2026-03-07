@@ -32,6 +32,14 @@ export function setSort(payload) {
   return { type: "PRODUCT_SET_SORT", payload };
 }
 
+export function setSelectedProduct(payload) {
+  return { type: "PRODUCT_SET_SELECTED_PRODUCT", payload };
+}
+
+export function setProductDetailFetchState(payload) {
+  return { type: "PRODUCT_SET_PRODUCT_DETAIL_FETCH_STATE", payload };
+}
+
 export function fetchCategoriesThunk() {
   return function (dispatch, getState) {
     const state = getState();
@@ -84,6 +92,26 @@ export function fetchProductsThunk(params) {
       })
       .catch(() => {
         dispatch(setFetchState("FAILED"));
+      });
+  };
+}
+
+export function fetchProductByIdThunk(productId) {
+  return function (dispatch) {
+    if (productId == null || productId === "") {
+      dispatch(setProductDetailFetchState("FAILED"));
+      return Promise.resolve();
+    }
+    dispatch(setProductDetailFetchState("FETCHING"));
+    return workintechApi
+      .get(`/products/${productId}`)
+      .then((res) => {
+        const product = res.data?.data ?? res.data;
+        dispatch(setSelectedProduct(product));
+        dispatch(setProductDetailFetchState("FETCHED"));
+      })
+      .catch(() => {
+        dispatch(setProductDetailFetchState("FAILED"));
       });
   };
 }
